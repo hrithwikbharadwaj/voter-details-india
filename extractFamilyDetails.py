@@ -26,7 +26,7 @@ def start(name, dob, gender, relationName):
     fileName = getFileName(voterInfo["st_code"],
                            voterInfo["ps_no"], voterInfo["ac_no"])
     PDF_PATH = f'temp/{fileName}'
-    pdfUrl = getPDFURL(voterInfo["ac_no"], PDF_PATH)
+    pdfUrl = getPDFURL(voterInfo["ac_no"], fileName)
     savePDF(pdfUrl, PDF_PATH)
     get_text_from_pdf(PDF_PATH, LOCAL_TEXT_PATH,
                       int(voterInfo["slno_inpart"]))

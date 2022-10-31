@@ -140,7 +140,6 @@ def get_pdf_from_url(url):
 
 
 def savePDF(url, PDFPath):
-    print(PDFPath)
     if not os.path.exists(PDFPath):
         pdf = get_pdf_from_url(url)
         with open(PDFPath, 'wb') as f:
