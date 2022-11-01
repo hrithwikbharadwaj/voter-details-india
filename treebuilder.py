@@ -1,3 +1,6 @@
+from fuzzy import levenshtein_ratio_and_distance
+
+
 def getSampleData():
     return [
         {
@@ -8,7 +11,7 @@ def getSampleData():
             "Name": "Shama",
             "address": "1-Revenue Houses belonging to Kidagannamma Barangay, Hebbalu 1st Phase, , Railway",
             "houseNumber": "109",
-            "ssno": "663"
+            "ssno": "585"
         },
         {
             "Age": "88",
@@ -16,7 +19,7 @@ def getSampleData():
             "Husband's Name": "Shama",
             "Name": "Sharada",
             "houseNumber": "109",
-            "ssno": "664"
+            "ssno": "583"
         },
         {
             "Age": "56",
@@ -24,7 +27,7 @@ def getSampleData():
             "Gender": "Male",
             "Name": "Sridhar",
             "houseNumber": "109",
-            "ssno": "665"
+            "ssno": "58s"
         },
         {
             "Age": "67",
@@ -32,7 +35,7 @@ def getSampleData():
             "Gender": "Male",
             "Name": "Viji",
             "houseNumber": "109",
-            "ssno": "665"
+            "ssno": "50s"
         },
         {
             "Age": "50",
@@ -40,7 +43,7 @@ def getSampleData():
             "Husband's Name": "Viji",
             "Name": "Geetha",
             "houseNumber": "109",
-            "ssno": "666"
+            "ssno": "50ss"
         },
         {
             "Age": "47",
@@ -48,7 +51,7 @@ def getSampleData():
             "Husband's Name": "Sridhar",
             "Name": "Lakshmi",
             "houseNumber": "109",
-            "ssno": "666"
+            "ssno": "656"
         }
     ]
 
@@ -64,12 +67,33 @@ def locateElement(children, name):
                 return some
 
 
+def fuzzyLocateElement(children, name):
+    for element in children:
+        if(levenshtein_ratio_and_distance(element["Name"], name) <= 6):
+            return element
+
+        if "children" in element:
+            some = locateElement(element["children"], name)
+            if(some):
+                return some
+
+
 def locateElementAndParent(children, name):
     for element in children:
         if(element["Name"] == name):
             return element
         if "children" in element:
-            some = locateElement(element["children"], name)
+            some = locateElementAndParent(element["children"], name)
+            if(some):
+                return {"element": some, "parent": element}
+
+
+def fuzzyLocateElementAndParent(children, name):
+    for element in children:
+        if(levenshtein_ratio_and_distance(element["Name"], name) <= 6):
+            return element
+        if "children" in element:
+            some = fuzzyLocateElementAndParent(element["children"], name)
             if(some):
                 return {"element": some, "parent": element}
 
@@ -100,8 +124,42 @@ def getFamilyTree(data):
         if "Husband's Name" in element:
             elementAndParent = locateElementAndParent(
                 familyTree, element["Husband's Name"])
-            if "element" in elementAndParent:
-                elementAndParent["element"]["wife"] = element
-            else:
-                elementAndParent["wife"] = element
+            if(elementAndParent):
+                if "element" in elementAndParent:
+                    elementAndParent["element"]["wife"] = element
+                else:
+                    elementAndParent["wife"] = element
     return familyTree
+
+
+def getFamilyTreeWithFuzzySearch(data):
+    convertAgeToNumber(data)
+    ageSortedData = sorted(data, key=lambda x: x["Age"], reverse=True)
+    familyTree = []
+    for element in ageSortedData:
+        if "Father's Name" in element:
+            if(len(element["Father's Name"])):
+                father = fuzzyLocateElement(
+                    familyTree, element["Father's Name"])
+                if not father:
+                    familyTree.append(element)
+                else:
+                    if "children" in father:
+                        father["children"].append(element)
+                    else:
+                        father["children"] = [element]
+
+            else:
+                familyTree.append(element)
+        if "Husband's Name" in element:
+            elementAndParent = fuzzyLocateElementAndParent(
+                familyTree, element["Husband's Name"])
+            if(elementAndParent):
+                if "element" in elementAndParent:
+                    elementAndParent["element"]["wife"] = element
+                else:
+                    elementAndParent["wife"] = element
+    return familyTree
+
+
+# print(getFamilyTree(getSampleData()))

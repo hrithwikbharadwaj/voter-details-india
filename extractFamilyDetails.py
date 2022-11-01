@@ -6,6 +6,7 @@ from voterInfo import getVoterInfo
 from pdfProccessing import savePDF, get_text_from_pdf
 from familyTree import get_all_people_data
 from translator import translate_locale_out
+from treebuilder import getFamilyTreeWithFuzzySearch
 
 
 def start(name, dob, gender, relationName):
@@ -33,4 +34,5 @@ def start(name, dob, gender, relationName):
     translate_locale_out(LOCAL_TEXT_PATH, ENGLISH_TEXT_PATH)
     family = get_all_people_data(
         voterInfo["slno_inpart"], ENGLISH_TEXT_PATH)
-    return family
+    familTree = getFamilyTreeWithFuzzySearch(family)
+    return familTree
