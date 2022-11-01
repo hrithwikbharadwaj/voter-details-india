@@ -2,8 +2,9 @@ from google.cloud import translate
 import os
 
 
-def translate_text(english_path: str, text, project_id= os.getenv('PROJECT_ID')):
+def translate_text(english_path: str, text):
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'keys.json'
+    project_id= os.getenv('PROJECT_ID')
     # print(len(text))
     client = translate.TranslationServiceClient()
     location = "global"
