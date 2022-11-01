@@ -30,7 +30,8 @@ def start(name, dob, gender, relationName):
     PDF_PATH = f'temp/{fileName}'
     pdfUrl = getPDFURL(voterInfo["ac_no"], fileName)
     savePDF(pdfUrl, PDF_PATH)
-    get_text_from_pdf(PDF_PATH, MINI_PDF_PATH, LOCAL_TEXT_PATH)
+    get_text_from_pdf(PDF_PATH, MINI_PDF_PATH, LOCAL_TEXT_PATH,
+                      int(voterInfo["slno_inpart"]))
     translate_locale_out(LOCAL_TEXT_PATH, ENGLISH_TEXT_PATH)
     family = get_all_people_data(
         voterInfo["slno_inpart"], ENGLISH_TEXT_PATH)

@@ -36,8 +36,9 @@ def findMember(ssno, members):
 def findFamilyMembers(houseNumber, members):
     family = []
     for member in members:
-        if(member["houseNumber"] == houseNumber):
-            family.append(member)
+        if "houseNumber" in member:
+            if(member["houseNumber"] == houseNumber):
+                family.append(member)
     return family
 
 

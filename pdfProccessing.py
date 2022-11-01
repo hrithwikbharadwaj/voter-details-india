@@ -20,17 +20,17 @@ def convertArraytoBytes(array):
     return encoded_image.tobytes()
 
 
-def extractThreeNearestPages(pdf_path, mini_pdf_path):
+def extractThreeNearestPages(serialNumber, pdf_path, mini_pdf_path):
     reader = PdfReader(pdf_path)
     totalPages = reader.numPages
     writer = PdfWriter()
-    pageRange = math.ceil(665/30) + 1
+    pageRange = math.ceil(serialNumber/30) + 1
     previousPageIndex = pageRange - 1
     currentPageIndex = pageRange
     nextPageIndex = pageRange + 1
 
-    # if previousPageIndex <= totalPages:
-    #     writer.add_page(reader.pages[previousPageIndex])
+    if previousPageIndex <= totalPages:
+        writer.add_page(reader.pages[previousPageIndex])
     if currentPageIndex <= totalPages:
         writer.add_page(reader.pages[currentPageIndex])
     if nextPageIndex <= totalPages:
@@ -40,8 +40,8 @@ def extractThreeNearestPages(pdf_path, mini_pdf_path):
         writer.write(fp)
 
 
-def get_text_from_pdf(pdf_path, mini_pdf_path, locale_path) -> str:
-    extractThreeNearestPages(pdf_path, mini_pdf_path)
+def get_text_from_pdf(pdf_path, mini_pdf_path, locale_path, serialNumber) -> str:
+    extractThreeNearestPages(serialNumber, pdf_path, mini_pdf_path)
     reader = PdfReader(mini_pdf_path)
     totalpages = reader.numPages
     client = vision.ImageAnnotatorClient()
