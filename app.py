@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from extractFamilyDetails import start
 from flask_cors import CORS
 from dotenv import load_dotenv
+from treebuilder import getSampleData, getFamilyTree
 
 load_dotenv()
 
@@ -26,6 +27,13 @@ def getFamilyDetails():
         return "State Not Supported", 400
     res = start(name, dob, gender, relationName)
     return jsonify({"data": res})
+
+
+@app.route('/sample', methods=['GET'])
+def getSampleFamilyTree():
+    sampleInput = getSampleData()
+    familyTree = getFamilyTree(getSampleData())
+    return jsonify({"sampleInput": sampleInput, "familyTree": familyTree})
 
 
 if __name__ == '__main__':
