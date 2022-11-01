@@ -3,6 +3,7 @@ from extractFamilyDetails import start
 from flask_cors import CORS
 from dotenv import load_dotenv
 from treebuilder import getSampleData, getFamilyTree
+from utils import validateStringNotEmpty
 
 load_dotenv()
 
@@ -18,6 +19,23 @@ def helloWorld():
 @app.route('/', methods=['POST'])
 def getFamilyDetails():
     data = request.json
+
+    nameValidation = validateStringNotEmpty("name", data)
+    if nameValidation:
+        return nameValidation
+    dobValidation = validateStringNotEmpty("dob", data)
+    if dobValidation:
+        return dobValidation
+    stateValidation = validateStringNotEmpty("state", data)
+    if stateValidation:
+        return stateValidation
+    genderValidation = validateStringNotEmpty("gender", data)
+    if genderValidation:
+        return genderValidation
+    relationValidation = validateStringNotEmpty("relationName", data)
+    if relationValidation:
+        return relationValidation
+
     name = data["name"]
     dob = data['dob']
     state = data['state']

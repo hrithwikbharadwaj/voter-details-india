@@ -50,3 +50,12 @@ def getPDFURL(acNumber, fileName):
 def getFileName(stateCode, partNumber, acNumber):
     if(stateCode == "S10"):
         return f"{stateCode}A{acNumber}P{partNumber}.pdf"
+
+
+def validateStringNotEmpty(value, data):
+    if value not in data:
+        message = value + " cannot be null or undefined"
+        return message, 400
+    if len(data[value]) <= 0:
+        message = value + " cannot be empty"
+        return message, 400

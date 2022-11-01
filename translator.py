@@ -4,8 +4,7 @@ import os
 
 def translate_text(english_path: str, text):
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'keys.json'
-    project_id= os.getenv('PROJECT_ID')
-    # print(len(text))
+    project_id = os.getenv('PROJECT_ID')
     client = translate.TranslationServiceClient()
     location = "global"
     parent = f"projects/{project_id}/locations/{location}"
