@@ -32,5 +32,3 @@ def levenshtein_ratio_and_distance(s, t, ratio_calc=False):
 
 Str1 = "Shama Iyengar"
 Str2 = "Shamayyangar MV"
-Distance = levenshtein_ratio_and_distance(Str1.lower(), Str2.lower())
-print(Distance)
