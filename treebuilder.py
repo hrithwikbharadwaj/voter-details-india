@@ -69,7 +69,7 @@ def locateElement(children, name):
 
 def fuzzyLocateElement(children, name):
     for element in children:
-        if(levenshtein_ratio_and_distance(element["Name"], name) <= 6):
+        if(levenshtein_ratio_and_distance(element["Name"], name) <= 3):
             return element
 
         if "children" in element:
@@ -90,7 +90,7 @@ def locateElementAndParent(children, name):
 
 def fuzzyLocateElementAndParent(children, name):
     for element in children:
-        if(levenshtein_ratio_and_distance(element["Name"], name) <= 6):
+        if(levenshtein_ratio_and_distance(element["Name"], name) <= 3):
             return element
         if "children" in element:
             some = fuzzyLocateElementAndParent(element["children"], name)
@@ -160,6 +160,3 @@ def getFamilyTreeWithFuzzySearch(data):
                 else:
                     elementAndParent["wife"] = element
     return familyTree
-
-
-# print(getFamilyTree(getSampleData()))

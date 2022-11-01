@@ -28,7 +28,3 @@ def levenshtein_ratio_and_distance(s, t, ratio_calc=False):
         return Ratio
     else:
         return distance[row][col]
-
-
-Str1 = "Shama Iyengar"
-Str2 = "Shamayyangar MV"

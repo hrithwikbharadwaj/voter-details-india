@@ -3,19 +3,20 @@ import re
 
 def getKeyValue(str):
     properties = {}
-    something = str.split(":")
-    if len(something) > 2:
+    attributes = str.split(":")
+    # if there are multiple attributes in one line then form a dict and return it
+    if len(attributes) > 2:
         allValues = str.split(" ")
         values = allValues[2::3]
         keys = allValues[0::3]
         for index, value in enumerate(values):
             properties[keys[index]] = value
         return properties
-    key = something[0].strip()
+    key = attributes[0].strip()
     match = re.search("^House", key)
     if(match):
         key = "houseNumber"
-    value = something[len(something) - 1].strip()
+    value = attributes[len(attributes) - 1].strip()
     properties[key] = value
     return properties
 
@@ -45,12 +46,18 @@ def get_all_people_data(serialNumber, english_path: str):
         content = f.read()
     blocks = content.split('------------')
     members = []
-    # presentBlock = blocks[0]
 
     for block in blocks:
         lines = block.split('\n')
         removeBlankSpaces(lines)
-        for value in lines:
+        for index, value in enumerate(lines):
+            if index < len(lines) - 1:
+                if re.search('^House', lines[index+1]):
+                    if "Father's Name" in memberValue:
+                        memberValue["Father's Name"] = memberValue["Father's Name"] + " " + value
+                    if "Husband's Name" in memberValue:
+                        memberValue["Husband's Name"] = memberValue["Husband's Name"] + " " + value
+
             if(re.search('^[0-9]+', value)):
                 ssno = re.search('[0-9]+', value).group(0)
                 members.append({"ssno": ssno})
@@ -60,7 +67,3 @@ def get_all_people_data(serialNumber, english_path: str):
     houseNumber = user["houseNumber"]
     family = findFamilyMembers(houseNumber, members)
     return family
-
-
-# get_all_people_data(
-#     "665", "temp-c1a07dbe-5893-11ed-9098-3e9509a4dc49\englishText.txt")
