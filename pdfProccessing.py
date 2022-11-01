@@ -1,4 +1,4 @@
-import PyPDF2
+from PyPDF2 import PdfWriter, PdfReader
 import cv2
 from pdf2image import convert_from_path
 import numpy as np
@@ -12,38 +12,54 @@ import math
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'keys.json'
 
+IMAGE_DPI = 150
+
 
 def convertArraytoBytes(array):
     success, encoded_image = cv2.imencode('.png', array)
     return encoded_image.tobytes()
 
 
-def get_text_from_pdf(pdf_path: str, locale_path: str, serialNumber) -> str:
-    doc = open(pdf_path, 'rb')
-    readpdf = PyPDF2.PdfFileReader(doc)
-    totalpages = readpdf.numPages
+def extractThreeNearestPages(pdf_path, mini_pdf_path):
+    reader = PdfReader(pdf_path)
+    totalPages = reader.numPages
+    writer = PdfWriter()
+    pageRange = math.ceil(665/30) + 1
+    previousPageIndex = pageRange - 1
+    currentPageIndex = pageRange
+    nextPageIndex = pageRange + 1
+
+    # if previousPageIndex <= totalPages:
+    #     writer.add_page(reader.pages[previousPageIndex])
+    if currentPageIndex <= totalPages:
+        writer.add_page(reader.pages[currentPageIndex])
+    if nextPageIndex <= totalPages:
+        writer.add_page(reader.pages[nextPageIndex])
+
+    with open(mini_pdf_path, "wb") as fp:
+        writer.write(fp)
+
+
+def get_text_from_pdf(pdf_path, mini_pdf_path, locale_path) -> str:
+    extractThreeNearestPages(pdf_path, mini_pdf_path)
+    reader = PdfReader(mini_pdf_path)
+    totalpages = reader.numPages
     client = vision.ImageAnnotatorClient()
+
     if os.name == 'nt':
         pages = convert_from_path(
-            pdf_path, 150, poppler_path=r"C:\Program Files\poppler-0.68.0_x86\bin")
+            mini_pdf_path, IMAGE_DPI, poppler_path=r"C:\Program Files\poppler-0.68.0_x86\bin")
     else:
-        pages = convert_from_path(pdf_path, 150)
+        pages = convert_from_path(mini_pdf_path, IMAGE_DPI)
 
     page_no = 0
     j = 0
-    pageRange = math.ceil(serialNumber/30) + 1
-    finalPages = [pages[pageRange - 1], pages[pageRange], pages[pageRange + 1]]
-    print(finalPages)
 
-    # console_file = open("dump.txt", "a")
-    for page in finalPages:
+    for page in pages:
 
         page_no = page_no+1
 
-        if(page_no < 3):
-            continue
-
-        if(page_no >= totalpages-1):
+        if(page_no > totalpages):
             break
         # console_file.write('hello ' + str(i))
 
@@ -124,7 +140,6 @@ def get_text_from_pdf(pdf_path: str, locale_path: str, serialNumber) -> str:
                             ignore_index=True
                         )
                     try:
-                        # print(df['description'][0])
                         with open(locale_path, "a", encoding='utf-8') as myfile:
                             myfile.write(df['description'][0])
                             myfile.write("\n------------\n")

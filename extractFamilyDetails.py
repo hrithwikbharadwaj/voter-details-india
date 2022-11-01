@@ -17,6 +17,7 @@ def start(name, dob, gender, relationName):
 
     CAPTCHA_PATH = f'temp/{randomId}_captcha.png'
     PDF_PATH = f'temp/voterRoll.pdf'
+    MINI_PDF_PATH = f'temp/{randomId}_extracted.pdf'
     LOCAL_TEXT_PATH = f'temp/{randomId}_localText.txt'
     ENGLISH_TEXT_PATH = f'temp/{randomId}_englishText.txt'
     voterInfo = getVoterInfo(name, dob, gender,
@@ -28,8 +29,7 @@ def start(name, dob, gender, relationName):
     PDF_PATH = f'temp/{fileName}'
     pdfUrl = getPDFURL(voterInfo["ac_no"], fileName)
     savePDF(pdfUrl, PDF_PATH)
-    get_text_from_pdf(PDF_PATH, LOCAL_TEXT_PATH,
-                      int(voterInfo["slno_inpart"]))
+    get_text_from_pdf(PDF_PATH, MINI_PDF_PATH, LOCAL_TEXT_PATH)
     translate_locale_out(LOCAL_TEXT_PATH, ENGLISH_TEXT_PATH)
     family = get_all_people_data(
         voterInfo["slno_inpart"], ENGLISH_TEXT_PATH)
