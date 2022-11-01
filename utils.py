@@ -6,7 +6,7 @@ def getCaptchaHeaders():
         'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9,ta;q=0.8',
         'Connection': 'keep-alive',
-        'Cookie': 'Electoral=456c656374726f6c7365617263682d73657276957234; Electoral=456c656374726f6c7365617263682d73657276957234; cookiesession1=678B2867FFB16F1E02B1283C8A931300; runOnce=true; electoralSearchId=xetigxgmpvlzqmcefwlcw1hk; __RequestVerificationToken=FCwqEXXu4x5T37b7yfzBS56V7gSVKz8twSo-2QzOm36kr9bPALSRGxakDfRKPcEgqhTef3acSLBbDqNwaDgxEwQkuAwgVMMKvZHlbem8pDk1',
+        'Cookie': 'Electoral=456c656374726f6c7365617263682d73657276657234; Electoral=456c656374726f6c7365617263682d73657276657234; cookiesession1=678B286716E22527B6A16DB2F0E22C51; runOnce=true; electoralSearchId=vdtuoet25dkc2ouy0jksp3qt; __RequestVerificationToken=TfAV_RJslHg4Sl0CDszqTzhBj8B0avKCVjaV0H5jMN4w2iC3aQrZzY3KvUfgvpECk2PRzsKsZeW5bwgEZyJN3cHNu8_S6bynpcSrrd84nyw1',
         'Referer': 'https://electoralsearch.in/',
         'Sec-Fetch-Dest': 'image',
         'Sec-Fetch-Mode': 'no-cors',
@@ -15,6 +15,17 @@ def getCaptchaHeaders():
         'sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"',
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Linux"',
+    }
+
+
+def getCookies():
+    return {
+        'Electoral': '456c656374726f6c7365617263682d73657276657234',
+        'Electoral': '456c656374726f6c7365617263682d73657276657234',
+        'cookiesession1': '678B286716E22527B6A16DB2F0E22C51',
+        'runOnce': 'true',
+        'electoralSearchId': 'vdtuoet25dkc2ouy0jksp3qt',
+        '__RequestVerificationToken': 'TfAV_RJslHg4Sl0CDszqTzhBj8B0avKCVjaV0H5jMN4w2iC3aQrZzY3KvUfgvpECk2PRzsKsZeW5bwgEZyJN3cHNu8_S6bynpcSrrd84nyw1',
     }
 
 
